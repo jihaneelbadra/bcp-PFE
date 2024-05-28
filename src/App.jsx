@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import SidebarManager from './components/sidebar/sidebarManager';
+import Header from './components/header/header';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const userRole = 'admin'; 
+  console.log('Rendering App with userRole:', userRole); 
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <div className="flex flex-col h-screen">
+        <div className="flex">
+          <SidebarManager role={userRole} />
+          <div className="flex flex-col w-full">
+            <Header />
+            <div className="flex-grow p-4">
+              <Routes>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/admin/treatments" element={<Treatments />} />
+                <Route path="/admin/interfaces" element={<Interfaces />} />
+                <Route path="/users" element={<Users />} />
+                <Route path="/treatments" element={<Treatments />} />
+                <Route path="/history" element={<History />} />
+                {/* <Route path="/profil" element={<Profil />}  /> */}
+              </Routes>
+            </div>
+          </div>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </Router>
+  );
+};
 
-export default App
+const Dashboard = () => <div>Tableau de bord</div>;
+const Admin = () => <div>Gestionnaire d'administration</div>;
+const Users = () => <div>Gestion d'utilisateurs</div>;
+const Treatments = () => <div>Traitements</div>;
+const Interfaces = () => <div>Interfaces</div>;
+const History = () => <div>Historique des traitements</div>;
+
+export default App;
