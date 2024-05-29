@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SidebarManager from './components/sidebar/sidebarManager';
 import Header from './components/header/header';
-
+import Dashboard from './components/dashboard/dashboard';
 const App = () => {
   const userRole = 'admin'; 
   console.log('Rendering App with userRole:', userRole); 
@@ -33,7 +33,6 @@ const App = () => {
   );
 };
 
-const Dashboard = () => <div>Tableau de bord</div>;
 const Admin = () => <div>Gestionnaire d'administration</div>;
 const Users = () => <div>Gestion d'utilisateurs</div>;
 const Treatments = () => <div>Traitements</div>;
