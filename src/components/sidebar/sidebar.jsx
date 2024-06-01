@@ -24,12 +24,12 @@ const Sidebar = ({ menu }) => {
   }, []);
 
   return (
-    <div className="bg-[#FAD7A0] h-screen flex flex-col w-64">
+    <div className="bg-[#FAD7A0] h-fullflex flex-col w-64">
       <div className="text-center mb-8 p-4">
         <img src="src\assets\1280px-Logo_BCP.svg.png" alt="Logo de l'entreprise" 
         className="mx-auto w-28 h-auto" />
       </div>
-      <div className="flex-1 overflow-y-auto" ref={menuRef}>
+      <div className="flex-1 " ref={menuRef}>
         <ul>
           {menu.map((item, index) => (
             <li key={index} className="mb-2 px-3">

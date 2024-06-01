@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PlayIcon, XCircleIcon, CheckCircleIcon, XIcon } from 'lucide-react'; // Ajout de l'icône X
+import { PlayIcon, XCircleIcon, CheckCircleIcon, XIcon } from 'lucide-react';
 
 const InterfacesTable = ({ data }) => {
   const [selectedTraitement, setSelectedTraitement] = useState(null);
@@ -37,14 +37,16 @@ const InterfacesTable = ({ data }) => {
 
   return (
     <div className="flex w-full">
-      <div className={`transition-all duration-300 ${selectedTraitement ? 'w-2/3' : 'w-full'}`}>
-        <table className="min-w-full bg-white table-fixed">
+      <div className={`transition-all duration-300 ${selectedTraitement ? 'w-2/3' : 'w-full'} bg-white p-1 rounded-lg shadow-md`}>
+        <table className="min-w-full bg-white table-fixed rounded-lg">
           <thead>
             <tr>
               <th className="py-2 text-center">Traitement</th>
               <th className="py-2 text-center">Sens du Flux</th>
               <th className="py-2 text-center">Mode de Lancement</th>
               <th className="py-2 text-center">État</th>
+              <th className="py-2 text-center">Date de Début</th> 
+              <th className="py-2 text-center">Date de Fin</th> 
               <th className="py-2 text-center">Action</th>
             </tr>
           </thead>
@@ -59,6 +61,8 @@ const InterfacesTable = ({ data }) => {
                 <td className="py-2 px-4 text-center">{row.sensDuFlux}</td>
                 <td className="py-2 px-4 text-center">{row.modeDeLancement}</td>
                 <td className="py-2 px-4 text-center">{renderEtatIcon(row.etat)}</td>
+                <td className="py-2 px-4 text-center">{row.dateDebut}</td> 
+                <td className="py-2 px-4 text-center">{row.dateFin}</td>
                 <td className="py-2 px-4 text-center">
                   <button
                     className={`px-4 py-2 border-2 border-[#FAD7A0] text-gray-600 rounded ${isButtonDisabled(row.modeDeLancement, row.etat) ? 'opacity-50 bg-[#FAD7A0] cursor-not-allowed' : 'bg-[#FAD7A0] hover:bg-[#E2B68D]'}`}
@@ -74,7 +78,7 @@ const InterfacesTable = ({ data }) => {
       </div>
 
       {selectedTraitement && (
-        <div className="w-1/3 border-l border-gray-300 p-4 relative">
+        <div className="w-1/3 border-l border-gray-300 p-3 relative bg-white rounded-lg shadow-lg">
           <h3 className="text-lg font-semibold mb-4">{selectedTraitement}</h3>
           <button
             className="absolute top-2 right-2 p-1 bg-gray-200 rounded-full hover:bg-gray-300"
@@ -83,7 +87,7 @@ const InterfacesTable = ({ data }) => {
             <XIcon className="w-4 h-4 text-gray-600" />
           </button>
 
-          <table className="min-w-full bg-white table-fixed">
+          <table className="min-w-full bg-white table-fixed rounded-lg">
             <thead>
               <tr>
                 <th className="py-2 text-center">Interface</th>
