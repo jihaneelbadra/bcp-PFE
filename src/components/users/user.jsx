@@ -8,7 +8,7 @@ const User = () => {
     firstname: '',
     lastname: '',
     email: '',
-    phone: '',
+    phone: 0,
     password: '',
     role: 'USER',
   });
