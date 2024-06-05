@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserCircleIcon } from 'lucide-react';
@@ -23,7 +25,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="p-4 flex justify-between items-center"> 
+    <div className="p-3 flex justify-between items-center"> 
       <div>
         <p className="text-sm">Journée comptable : {currentDate ? currentDate.toLocaleDateString() : 'Chargement...'}</p>
         <hr className="border-t border-gray-300 mt-2" />
@@ -38,3 +40,4 @@ const Header = () => {
 };
 
 export default Header;
+

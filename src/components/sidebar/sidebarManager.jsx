@@ -15,7 +15,7 @@ const SidebarManager = ({ role }) => {
         { name: 'Interfaces', path: '/admin/interfaces' }
       ] 
     },
-    { name: 'Gestion des utilisateurs', path: '/users', icon: <UsersIcon /> },
+    { name: 'Gestion des utilisateurs', path: '/user', icon: <UsersIcon /> },
   ];
 
   const executorMenu = [
@@ -30,3 +30,5 @@ const SidebarManager = ({ role }) => {
 };
 
 export default SidebarManager;
+
+

@@ -5,6 +5,7 @@ import App from './AppJihane.jsx'
 import Login from './components/authentication/Login.jsx'
 import './index.css'
 
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App/>

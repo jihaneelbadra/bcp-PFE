@@ -1,14 +1,15 @@
-/** @type {import('tailwindcss').Config} */
-
-
-module.exports = {
+export default {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        'orange-custom': '#FAD7A0',
+        'custom-bg': '#E2B68D',
+        'orange-custom': '#FAD7A0' // Ajoutez cette ligne
+      },
+      spacing: {
+        'full': '100%',
       },
     },
   },
