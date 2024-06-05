@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import SidebarManager from './components/sidebar/sidebarManager';
 import Header from './components/header/header';
 import Dashboard from './components/dashboard/dashboard';
-import Treatments from './components/executor/treatments'
+import Treatments from './components/executorTreatments/treatments';
+import LaunchHistory from './components/launchHistory/launchHistory';
 
 const App = () => {
   const userRole = 'executor';
@@ -38,7 +38,7 @@ const MainContent = ({ userRole, currentDate, onDateChange }) => {
               <Route path="/admin/interfaces" element={<Interfaces />} /> */}
               <Route path="/users" element={<Users />} />
               <Route path="/treatments" element={<Treatments />} />
-              <Route path="/history" element={<History />} />
+              <Route path="/history" element={<LaunchHistory />} /> {/* Remplacement de History par LaunchHistory */}
               {/* <Route path="/profil" element={<Profil />} /> */}
             </Routes>
           </div>
@@ -52,6 +52,6 @@ const Admin = () => <div>Gestionnaire d'administration</div>;
 const Users = () => <div>Gestion d'utilisateurs</div>;
 // const Treatments = () => <div>Traitements</div>;
 const Interfaces = () => <div>Interfaces</div>;
-const History = () => <div>Historique des traitements</div>;
+// const History = () => <div>Historique des traitements</div>;
 
 export default App;

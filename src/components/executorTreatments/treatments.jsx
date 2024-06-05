@@ -48,6 +48,7 @@ const Treatments = () => {
 
   return (
     <div className="w-full bg-white p-4 rounded-lg shadow-md">
+     <h1 className="text-2xl font-bold mb-4">Traitements</h1>
       <table className="min-w-full text-sm bg-white table-fixed rounded-lg">
         <thead>
           <tr>
