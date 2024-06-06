@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-
-
-=======
 // components/header/header.jsx
->>>>>>> 1c662dde5f870066a76fe4ee80d0f8771fb71d8c
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserCircleIcon } from 'lucide-react';
@@ -47,7 +42,3 @@ const Header = ({ onDateChange }) => {
 };
 
 export default Header;
-<<<<<<< HEAD
-
-=======
->>>>>>> 1c662dde5f870066a76fe4ee80d0f8771fb71d8c

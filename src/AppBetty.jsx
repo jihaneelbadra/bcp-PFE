@@ -5,6 +5,8 @@ import Header from './components/header/header';
 import Dashboard from './components/dashboard/dashboard';
 import Treatments from './components/executorTreatments/treatments';
 import LaunchHistory from './components/launchHistory/launchHistory';
+import AdminTreatments from './components/adminTreatments/adminTreatments';
+import TreatmentsForm from './components/adminTreatments/treatmentsForm'; // Importez le composant TreatmentsForm
 
 const App = () => {
   const userRole = 'executor';
@@ -33,13 +35,9 @@ const MainContent = ({ userRole, currentDate, onDateChange }) => {
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" />} />
               <Route path="/dashboard" element={<Dashboard currentDate={currentDate} />} />
-              {/* <Route path="/admin" element={<Admin />} />
-              <Route path="/admin/treatments" element={<Treatments />} />
-              <Route path="/admin/interfaces" element={<Interfaces />} /> */}
-              <Route path="/users" element={<Users />} />
               <Route path="/treatments" element={<Treatments />} />
-              <Route path="/history" element={<LaunchHistory />} /> {/* Remplacement de History par LaunchHistory */}
-              {/* <Route path="/profil" element={<Profil />} /> */}
+              <Route path="/history" element={<LaunchHistory />} />
+              <Route path="/admin/*" element={<Admin />} /> {/* Nouvelle route pour l'administration */}
             </Routes>
           </div>
         </div>
@@ -48,10 +46,18 @@ const MainContent = ({ userRole, currentDate, onDateChange }) => {
   );
 };
 
-const Admin = () => <div>Gestionnaire d'administration</div>;
-const Users = () => <div>Gestion d'utilisateurs</div>;
-// const Treatments = () => <div>Traitements</div>;
-const Interfaces = () => <div>Interfaces</div>;
-// const History = () => <div>Historique des traitements</div>;
+const Admin = () => {
+  const location = useLocation();
+  console.log('Rendering Admin with location:', location.pathname);
+  
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/admin/treatments" />} />
+      <Route path="treatments" element={<AdminTreatments />} /> {/* Route pour afficher les traitements */}
+      <Route path="treatments/add" element={<TreatmentsForm />} /> {/* Route pour ajouter un traitement */}
+      <Route path="treatments/:id/edit" element={<TreatmentsForm />} /> {/* Route pour modifier un traitement */}
+    </Routes>
+  );
+};
 
 export default App;

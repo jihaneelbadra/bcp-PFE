@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-
-import React, { useState } from 'react';
-=======
 import React, { useState, useEffect } from 'react';
->>>>>>> 1c662dde5f870066a76fe4ee80d0f8771fb71d8c
 import { PlayIcon, XCircleIcon, CheckCircleIcon, XIcon } from 'lucide-react';
 
 const InterfacesTable = ({ data, onTraitementClick, instanceInterfacesData, selectedTraitementName }) => {
