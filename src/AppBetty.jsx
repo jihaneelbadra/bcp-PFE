@@ -6,7 +6,8 @@ import Dashboard from './components/dashboard/dashboard';
 import Treatments from './components/executorTreatments/treatments';
 import LaunchHistory from './components/launchHistory/launchHistory';
 import AdminTreatments from './components/adminTreatments/adminTreatments';
-import TreatmentsForm from './components/adminTreatments/treatmentsForm'; // Importez le composant TreatmentsForm
+import TreatmentsForm from './components/adminTreatments/treatmentsForm';
+import Login from './components/authentication/Login';
 
 const App = () => {
   const userRole = 'executor';
@@ -23,17 +24,20 @@ const App = () => {
 
 const MainContent = ({ userRole, currentDate, onDateChange }) => {
   const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
   const isDashboard = location.pathname === '/dashboard';
 
   return (
     <div className={`flex flex-col min-h-screen ${isDashboard ? 'bg-[#F5F5F5]' : ''}`}>
       <div className="flex flex-1">
-        <SidebarManager role={userRole} />
+        {!isLoginPage && <SidebarManager role={userRole} />}
         <div className="flex flex-col w-full">
-          <Header onDateChange={onDateChange} />
+          {!isLoginPage && <Header onDateChange={onDateChange} />}
           <div className="flex-grow p-4">
             <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" />} />
+              <Route path="/" element={<Navigate to="/login" />} />
+              <Route path="/login" element={<Login />} />
+              
               <Route path="/dashboard" element={<Dashboard currentDate={currentDate} />} />
               <Route path="/treatments" element={<Treatments />} />
               <Route path="/history" element={<LaunchHistory />} />

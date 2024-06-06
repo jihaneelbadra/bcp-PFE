@@ -1,8 +1,7 @@
 
 import ReactDOM from 'react-dom/client'
 import React from 'react'
-import App from './AppJihane.jsx'
-import Login from './components/authentication/Login.jsx'
+import App from './AppBetty.jsx'
 import './index.css'
 
 

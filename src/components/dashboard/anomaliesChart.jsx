@@ -14,7 +14,9 @@ const AnomaliesCount = ({ currentDate }) => {
     const fetchInterfacesData = async () => {
       console.log('3');
       try {
-        const response = await axios.get('http://localhost:8080/mimapi/instance-interfaces');
+        const response = await axios.get('http://localhost:8080/mimapi/instance-interfaces', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
         // console.log('Fetched anomalies data:', response.data);
         const interfacesData = response.data;
 

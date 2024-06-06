@@ -7,7 +7,9 @@ const Treatments = () => {
   useEffect(() => {
     const fetchTraitements = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/mimapi/traitements');
+        const response = await axios.get('http://localhost:8080/mimapi/traitements', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
         setTraitements(response.data);
       } catch (error) {
         console.error('Error fetching traitements:', error);
@@ -36,7 +38,8 @@ const Treatments = () => {
           interfaceIds: interfaceIdsString,
           dateDebutLancement,
           dateFinLancement
-        }
+        },
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       console.log('Treatment launched successfully:', response.data);
       alert('Treatment launched successfully');
@@ -48,7 +51,7 @@ const Treatments = () => {
 
   return (
     <div className="w-full bg-white p-4 rounded-lg shadow-md">
-     <h1 className="text-2xl font-bold mb-4">Traitements</h1>
+      <h1 className="text-2xl font-bold mb-4">Traitements</h1>
       <table className="min-w-full text-sm bg-white table-fixed rounded-lg">
         <thead>
           <tr>

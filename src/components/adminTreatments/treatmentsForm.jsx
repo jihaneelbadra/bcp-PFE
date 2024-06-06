@@ -12,7 +12,9 @@ const TraitementForm = ({ onSubmit, traitement }) => {
     e.preventDefault();
     const newTraitement = { nomTraitement, sensFlux, modeLancement, interfaceNames, interfaceIds };
     try {
-      await axios.post('http://localhost:8080/mimapi/traitements', newTraitement);
+      await axios.post('http://localhost:8080/mimapi/traitements', newTraitement, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
       onSubmit();
     } catch (error) {
       console.error('Error adding traitement:', error);

@@ -8,7 +8,9 @@ const LaunchHistory = () => {
   useEffect(() => {
     const fetchLaunchHistory = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/mimapi/launchHistory');
+        const response = await axios.get('http://localhost:8080/mimapi/launchHistory', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
         setLaunchHistory(response.data);
       } catch (error) {
         console.error('Error fetching launch history:', error);
@@ -22,6 +24,7 @@ const LaunchHistory = () => {
     try {
       const response = await axios.get(url, {
         responseType: 'blob',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } // Ajoutez les en-têtes ici aussi
       });
       const urlBlob = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
@@ -44,9 +47,8 @@ const LaunchHistory = () => {
   };
 
   return (
-    
     <div className="w-full bg-white p-4 rounded-lg">
-     <h1 className="text-2xl font-bold mb-4">Historique des traitements</h1>
+      <h1 className="text-2xl font-bold mb-4">Historique des traitements</h1>
       <div className="overflow-auto max-h-80 mt-8">
         <table className="min-w-full text-sm bg-white table-fixed rounded-lg">
           <thead>
