@@ -8,6 +8,7 @@ import LaunchHistory from './components/launchHistory/launchHistory';
 import AdminTreatments from './components/adminTreatments/adminTreatments';
 import TreatmentsForm from './components/adminTreatments/treatmentsForm';
 import Login from './components/authentication/Login';
+import User from './components/users/user';
 
 const App = () => {
   const userRole = 'executor';
@@ -33,7 +34,7 @@ const MainContent = ({ userRole, currentDate, onDateChange }) => {
         {!isLoginPage && <SidebarManager role={userRole} />}
         <div className="flex flex-col w-full">
           {!isLoginPage && <Header onDateChange={onDateChange} />}
-          <div className="flex-grow p-4">
+          <div className={`flex-grow ${isLoginPage ? '' : 'p-4'}`}> {/* Condition pour appliquer ou non la classe p-4 */}
             <Routes>
               <Route path="/" element={<Navigate to="/login" />} />
               <Route path="/login" element={<Login />} />
@@ -42,6 +43,7 @@ const MainContent = ({ userRole, currentDate, onDateChange }) => {
               <Route path="/treatments" element={<Treatments />} />
               <Route path="/history" element={<LaunchHistory />} />
               <Route path="/admin/*" element={<Admin />} /> {/* Nouvelle route pour l'administration */}
+              <Route path="/user" element={<User />} />
             </Routes>
           </div>
         </div>
