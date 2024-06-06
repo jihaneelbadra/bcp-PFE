@@ -25,7 +25,7 @@ const Sidebar = ({ menu }) => {
   }, []);
 
   return (
-    <div className="bg-[#FAD7A0] h-fullflex flex-col w-64">
+    <div className="bg-[#FAD7A0] h-fullflex flex-col w-1/5">
       <div className="text-center mb-8 p-4">
         <img src="src\assets\1280px-Logo_BCP.svg.png" alt="Logo de l'entreprise" 
         className="mx-auto w-28 h-auto" />

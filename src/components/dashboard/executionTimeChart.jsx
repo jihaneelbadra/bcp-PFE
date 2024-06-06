@@ -1,35 +1,67 @@
-import React, { useEffect } from 'react';
-import "chart.js/auto";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
+import "chart.js/auto";
 
-const AverageExecutionTimeChart = ({ data }) => {
+const AverageExecutionTimeChart = () => {
+  const [executionData, setExecutionData] = useState([]);
 
-  const averageExecutionTimes = data.map((item) => {
-    const startTime = new Date(item.dateDebut).getTime();
-    const endTime = new Date(item.dateFin).getTime();
-  
-    return {
-      traitement: item.traitement,
-      averageExecutionTime: (endTime - startTime) / (1000 * 60), // Durée en minutes
+  useEffect(() => {
+    const fetchExecutionData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/mimapi/get-lancers');
+        console.log('Fetched execution data:', response.data);
+        setExecutionData(response.data.lancers);
+      } catch (error) {
+        console.error('Error fetching execution data:', error);
+      }
     };
-  });
-  // Extracting traitement names and average execution times for chart labels and data
-  const traitementNames = averageExecutionTimes.map((item) => item.traitement);
-  const executionTimes = averageExecutionTimes.map((item) => item.averageExecutionTime);
+
+    fetchExecutionData();
+  }, []);
+
+  const calculateAverageExecutionTimes = (data) => {
+    const executionTimes = {};
+
+    data.forEach((item) => {
+      if (item.dateFinLancement) {
+        const startTime = new Date(item.dateDebutLancement).getTime();
+        const endTime = new Date(item.dateFinLancement).getTime();
+        const executionTime = (endTime - startTime) / (1000 * 60); // Durée en minutes
+
+        if (executionTimes[item.nomTraitement]) {
+          executionTimes[item.nomTraitement].totalTime += executionTime;
+          executionTimes[item.nomTraitement].count += 1;
+        } else {
+          executionTimes[item.nomTraitement] = { totalTime: executionTime, count: 1 };
+        }
+      }
+    });
+
+    const averageExecutionTimes = [];
+    for (const [key, value] of Object.entries(executionTimes)) {
+      averageExecutionTimes.push({
+        nomTraitement: key,
+        averageTime: value.totalTime / value.count,
+      });
+    }
+
+    return averageExecutionTimes;
+  };
+
+  const averageExecutionTimes = calculateAverageExecutionTimes(executionData);
 
   // Creating chart data
   const chartData = {
-    labels: traitementNames,
+    labels: averageExecutionTimes.map((item) => item.nomTraitement),
     datasets: [
       {
-        data: executionTimes,
+        data: averageExecutionTimes.map((item) => item.averageTime),
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
-        label: 'Temps moyen d\'exécution',
-
+        label: "Temps moyen d'exécution",
       },
-      
     ],
   };
 
@@ -45,17 +77,37 @@ const AverageExecutionTimeChart = ({ data }) => {
       x: {
         title: {
           display: true,
-          text: 'Traitements',
+          text: '',
         },
+        ticks: {
+          maxRotation: 0,
+          minRotation: 0,
+          align:'center',
+          font: {
+            size: 10, // Taille de la police pour les étiquettes de l'axe x
+          },
+          callback: function (value) {
+            const maxLength = 30;
+            const label = this.getLabelForValue(value);
+            if (label.length > maxLength) {
+              return label.match(/.{1,20}/g); // Découper l'étiquette en morceaux de 15 caractères
+            } else {
+              return label;
+            }
+          },
+        }
       },
     },
+    
+    
   };
+
   return (
-<div className="h-80 p-3 bg-white rounded-lg shadow-md">      
+    <div className="w-full lg:h-100 p-3 bg-white rounded-lg shadow-md">
       <h2 className='text-M font-bold mb-4 text-left'>Temps moyen d'exécution des traitements</h2>
       <Bar data={chartData} options={chartOptions} />
     </div>
   );
 };
 
-export default AverageExecutionTimeChart; 
+export default AverageExecutionTimeChart;
