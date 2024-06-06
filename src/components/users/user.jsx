@@ -50,13 +50,12 @@ const Users = () => {
     }
   };
 
-  const handleUpdateUser = async (e) => {
-    e.preventDefault();
+  const handleUpdateUser = async () => {
     if (!currentUser.idUser) {
       setError('User ID is missing');
       return;
     }
-
+  
     try {
       const response = await api.put(`/users/${currentUser.idUser}`, currentUser, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -68,6 +67,7 @@ const Users = () => {
       setError('Failed to update user');
     }
   };
+  
 
   const handleDeleteUser = async (idUser) => {
     try {
@@ -122,10 +122,10 @@ const Users = () => {
               <td className="py-2 px-4 border-b">{user.tel}</td>
               <td className="py-2 px-4 border-b flex space-x-2">
                 <button onClick={() => selectUser(user)} className="bg-yellow-500 text-white p-2 rounded">
-                  Edit
+                  Modifier
                 </button>
                 <button onClick={() => handleDeleteUser(user.idUser)} className="bg-red-500 text-white p-2 rounded">
-                  Delete
+                  supprimer
                 </button>
               </td>
             </tr>
@@ -134,7 +134,7 @@ const Users = () => {
       </table>
 
       <div className="flex space-x-4 mb-4">
-        <button onClick={() => setAction('add')} className="bg-green-500 text-white p-2 rounded">Add User</button>
+        <button onClick={() => setAction('add')} className="bg-green-500 text-white p-2 rounded">Ajouter un utilisater</button>
       </div>
 
       {(action === 'add' || action === 'edit') && (
@@ -198,7 +198,7 @@ const Users = () => {
             )}
           </div>
           <button type="submit" className="mt-4 bg-blue-500 text-white p-2 rounded">
-            {action === 'add' ? 'Add User' : 'Update User'}
+            {action === 'add' ? 'Ajouter' : 'Modifier'}
           </button>
         </form>
       )}
