@@ -1,156 +1,209 @@
 import React, { useEffect, useState } from 'react';
 import api from '../authentication/axios';
 
-const User = () => {
+const Users = () => {
   const [users, setUsers] = useState([]);
-  const [editingUser, setEditingUser] = useState(null);
-  const [newUser, setNewUser] = useState({
+  const [error, setError] = useState('');
+  const [action, setAction] = useState('');
+  const [currentUser, setCurrentUser] = useState({
+    idUser: null,
     firstname: '',
     lastname: '',
     email: '',
-    phone: 0,
-    password: '',
-    role: 'USER',
+    role: '',
+    tel: '',
+    password: ''
   });
 
   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await api.get('/users', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Failed to fetch users:', error);
+        setError('Failed to fetch users');
+      }
+    };
+
     fetchUsers();
   }, []);
 
-  const fetchUsers = async () => {
-    try {
-      const response = await api.get('/users');
-      setUsers(response.data);
-    } catch (error) {
-      console.error('Failed to fetch users:', error);
-    }
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewUser((prev) => ({ ...prev, [name]: value }));
+    setCurrentUser({ ...currentUser, [name]: value });
   };
 
-  const handleAddUser = async () => {
+  const handleAddUser = async (e) => {
+    e.preventDefault();
     try {
-      await api.post('/users', newUser);
-      fetchUsers();
-      setNewUser({ firstname: '', lastname: '', email: '', phone: '', password: '', role: 'USER' });
+      const response = await api.post('/users', currentUser, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      setUsers([...users, response.data]);
+      resetForm();
     } catch (error) {
-      console.error('Failed to add user:', error);
+      console.error('Error adding user:', error);
+      setError('Failed to add user');
     }
   };
 
-  const handleDeleteUser = async (id) => {
+  const handleUpdateUser = async (e) => {
+    e.preventDefault();
+    if (!currentUser.idUser) {
+      setError('User ID is missing');
+      return;
+    }
+
     try {
-      await api.delete(`/users/${id}`);
-      fetchUsers();
+      const response = await api.put(`/users/${currentUser.idUser}`, currentUser, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      setUsers(users.map(user => (user.idUser === currentUser.idUser ? response.data : user)));
+      resetForm();
     } catch (error) {
-      console.error('Failed to delete user:', error);
+      console.error('Error updating user:', error);
+      setError('Failed to update user');
     }
   };
 
-  const handleEditUser = (user) => {
-    setEditingUser(user);
-    setNewUser(user);
+  const handleDeleteUser = async (idUser) => {
+    try {
+      await api.delete(`/users/${idUser}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      setUsers(users.filter(user => user.idUser !== idUser));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      setError('Failed to delete user');
+    }
   };
 
-  const handleUpdateUser = async () => {
-    try {
-      await api.put(`/users/${editingUser.id}`, newUser);
-      fetchUsers();
-      setEditingUser(null);
-      setNewUser({ firstname: '', lastname: '', email: '', phone: '', password: '', role: 'USER' });
-    } catch (error) {
-      console.error('Failed to update user:', error);
+  const resetForm = () => {
+    setCurrentUser({ idUser: null, firstname: '', lastname: '', email: '', role: '', tel: '', password: '' });
+    setAction('');
+  };
+
+  const selectUser = (user) => {
+    if (user && user.idUser) {
+      setCurrentUser(user);
+      setAction('edit');
+    } else {
+      console.error('Selected user is invalid:', user);
+      setError('Selected user is invalid');
     }
   };
 
   return (
-    <div>
-      <h1>Gestion des utilisateurs</h1>
-      <table className="min-w-full bg-white table-fixed rounded-lg">
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Users</h1>
+      {error && <p className="text-red-500">{error}</p>}
+
+      <table className="min-w-full bg-white border border-gray-200 mb-4">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Role</th>
-            <th>Actions</th>
+            <th className="py-2 px-4 border-b">First Name</th>
+            <th className="py-2 px-4 border-b">Last Name</th>
+            <th className="py-2 px-4 border-b">Email</th>
+            <th className="py-2 px-4 border-b">Role</th>
+            <th className="py-2 px-4 border-b">Phone</th>
+            <th className="py-2 px-4 border-b">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.firstname}</td>
-              <td>{user.lastname}</td>
-              <td>{user.email}</td>
-              <td>{user.phone}</td>
-              <td>{user.role}</td>
-              <td>
-                <button onClick={() => handleEditUser(user)}>Modifier</button>
-                <button onClick={() => handleDeleteUser(user.id)}>Supprimer</button>
+          {users.map(user => (
+            <tr key={user.idUser} className="hover:bg-gray-100">
+              <td className="py-2 px-4 border-b">{user.firstname}</td>
+              <td className="py-2 px-4 border-b">{user.lastname}</td>
+              <td className="py-2 px-4 border-b">{user.email}</td>
+              <td className="py-2 px-4 border-b">{user.role}</td>
+              <td className="py-2 px-4 border-b">{user.tel}</td>
+              <td className="py-2 px-4 border-b flex space-x-2">
+                <button onClick={() => selectUser(user)} className="bg-yellow-500 text-white p-2 rounded">
+                  Edit
+                </button>
+                <button onClick={() => handleDeleteUser(user.idUser)} className="bg-red-500 text-white p-2 rounded">
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <div className="mt-4">
-        <h2>{editingUser ? 'Modifier Utilisateur' : 'Ajouter Utilisateur'}</h2>
-        <input
-          type="text"
-          name="firstname"
-          value={newUser.firstname}
-          onChange={handleInputChange}
-          placeholder="First Name"
-        />
-        <input
-          type="text"
-          name="lastname"
-          value={newUser.lastname}
-          onChange={handleInputChange}
-          placeholder="Last Name"
-        />
-        <input
-          type="email"
-          name="email"
-          value={newUser.email}
-          onChange={handleInputChange}
-          placeholder="Email"
-        />
-        <input
-          type="text"
-          name="phone"
-          value={newUser.phone}
-          onChange={handleInputChange}
-          placeholder="Phone"
-        />
-        <input
-          type="password"
-          name="password"
-          value={newUser.password}
-          onChange={handleInputChange}
-          placeholder="Password"
-        />
-        <select
-          name="role"
-          value={newUser.role}
-          onChange={handleInputChange}
-        >
-          <option value="USER">USER</option>
-          <option value="ADMIN">ADMIN</option>
-        </select>
-        <button onClick={editingUser ? handleUpdateUser : handleAddUser}>
-          {editingUser ? 'Mettre à jour' : 'Ajouter'}
-        </button>
-        {editingUser && <button onClick={() => setEditingUser(null)}>Annuler</button>}
+      <div className="flex space-x-4 mb-4">
+        <button onClick={() => setAction('add')} className="bg-green-500 text-white p-2 rounded">Add User</button>
       </div>
+
+      {(action === 'add' || action === 'edit') && (
+        <form onSubmit={action === 'add' ? handleAddUser : handleUpdateUser} className="mb-4">
+          <div className="grid grid-cols-2 gap-4">
+            <input
+              type="text"
+              name="firstname"
+              value={currentUser.firstname}
+              onChange={handleInputChange}
+              placeholder="First Name"
+              className="border p-2"
+              required
+            />
+            <input
+              type="text"
+              name="lastname"
+              value={currentUser.lastname}
+              onChange={handleInputChange}
+              placeholder="Last Name"
+              className="border p-2"
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              value={currentUser.email}
+              onChange={handleInputChange}
+              placeholder="Email"
+              className="border p-2"
+              required
+            />
+            <input
+              type="text"
+              name="role"
+              value={currentUser.role}
+              onChange={handleInputChange}
+              placeholder="Role"
+              className="border p-2"
+              required
+            />
+            <input
+              type="tel"
+              name="tel"
+              value={currentUser.tel}
+              onChange={handleInputChange}
+              placeholder="Phone"
+              className="border p-2"
+              required
+            />
+            {action === 'add' && (
+              <input
+                type="password"
+                name="password"
+                value={currentUser.password}
+                onChange={handleInputChange}
+                placeholder="Password"
+                className="border p-2"
+                required
+              />
+            )}
+          </div>
+          <button type="submit" className="mt-4 bg-blue-500 text-white p-2 rounded">
+            {action === 'add' ? 'Add User' : 'Update User'}
+          </button>
+        </form>
+      )}
     </div>
   );
 };
 
-export default User;
+export default Users;
