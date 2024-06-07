@@ -1,4 +1,4 @@
-
+// authContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from './axios';
@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            // Récupérer les informations de l'utilisateur à partir du token
             api.get('/me', {
                 headers: { Authorization: `Bearer ${token}` }
             }).then(response => {

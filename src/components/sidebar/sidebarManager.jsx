@@ -24,7 +24,7 @@ const SidebarManager = ({ role }) => {
     { name: 'Historique des traitements', path: '/history', icon: <FileTextIcon /> },
   ];
 
-  const menu = role === 'admin' ? adminMenu : executorMenu;
+  const menu = role === 'executor' ? adminMenu : executorMenu;
 
   return <Sidebar menu={menu} />;
 };

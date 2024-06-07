@@ -9,7 +9,9 @@ const AverageExecutionTimeChart = () => {
   useEffect(() => {
     const fetchExecutionData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/mimapi/get-lancers');
+        const response = await axios.get('http://localhost:8080/mimapi/get-lancers', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
         console.log('Fetched execution data:', response.data);
         setExecutionData(response.data.lancers);
       } catch (error) {

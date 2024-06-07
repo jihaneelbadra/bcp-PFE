@@ -16,7 +16,9 @@ const Dashboard = ({ currentDate }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/mimapi/get-lancers');
+        const response = await axios.get('http://localhost:8080/mimapi/get-lancers', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
         console.log('Fetched data:', response.data);
         const sortedData = response.data.lancers.sort((a, b) => new Date(b.dateDebutLancement) - new Date(a.dateDebutLancement));
         const recentData = sortedData.slice(0, 3);
@@ -36,7 +38,9 @@ const Dashboard = ({ currentDate }) => {
     if (selectedTraitementId !== null) {
       const fetchInstanceInterfaces = async () => {
         try {
-          const response = await axios.get(`http://localhost:8080/mimapi/instance-interfaces/${selectedTraitementId}`);
+          const response = await axios.get(`http://localhost:8080/mimapi/instance-interfaces/${selectedTraitementId}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          });
           console.log('Fetched instance interfaces data:', response.data);
           setInstanceInterfacesData(response.data);
         } catch (error) {

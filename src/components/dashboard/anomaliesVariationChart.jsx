@@ -9,7 +9,9 @@ const AnomaliesVariationChart = () => {
   useEffect(() => {
     const fetchAnomaliesData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/mimapi/instance-interfaces');
+        const response = await axios.get('http://localhost:8080/mimapi/instance-interfaces', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
         setAnomaliesData(response.data);
       } catch (error) {
         console.error('Error fetching anomalies data:', error);
