@@ -9,6 +9,8 @@ const Treatments = () => {
   const [selectedTraitement, setSelectedTraitement] = useState(null);
   const [highlightedRow, setHighlightedRow] = useState(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [selectedSensFlux, setSelectedSensFlux] = useState('');
+  const [selectedModeLancement, setSelectedModeLancement] = useState('');
 
   useEffect(() => {
     fetchTraitements();
@@ -73,6 +75,12 @@ const Treatments = () => {
   const handleBackToTable = () => {
     setShowForm(false);
   };
+
+  const filteredTraitements = traitements.filter(traitement => {
+    if (selectedSensFlux && traitement.sensFlux !== selectedSensFlux) return false;
+    if (selectedModeLancement && traitement.modeLancement !== selectedModeLancement) return false;
+    return true;
+  });
 
   return (
     <div className="w-full bg-white p-4 rounded-lg">
