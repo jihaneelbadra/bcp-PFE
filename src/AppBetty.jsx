@@ -9,6 +9,8 @@ import AdminTreatments from './components/adminTreatments/adminTreatments';
 import TreatmentsForm from './components/adminTreatments/treatmentsForm';
 import Login from './components/authentication/Login';
 import User from './components/users/user';
+import Interfaces from './components/adminInterfaces/adminInterfaces';
+import InterfaceForm from './components/adminInterfaces/interfacesForm'; // Assurez-vous d'importer InterfaceForm
 
 const App = () => {
   const userRole = 'executor';
@@ -38,7 +40,6 @@ const MainContent = ({ userRole, currentDate, onDateChange }) => {
             <Routes>
               <Route path="/" element={<Navigate to="/login" />} />
               <Route path="/login" element={<Login />} />
-              
               <Route path="/dashboard" element={<Dashboard currentDate={currentDate} />} />
               <Route path="/treatments" element={<Treatments />} />
               <Route path="/history" element={<LaunchHistory />} />
@@ -62,6 +63,9 @@ const Admin = () => {
       <Route path="treatments" element={<AdminTreatments />} /> {/* Route pour afficher les traitements */}
       <Route path="treatments/add" element={<TreatmentsForm />} /> {/* Route pour ajouter un traitement */}
       <Route path="treatments/:id/edit" element={<TreatmentsForm />} /> {/* Route pour modifier un traitement */}
+      <Route path="interfaces" element={<Interfaces />} /> {/* Route pour afficher les interfaces */}
+      <Route path="interfaces/add" element={<InterfaceForm />} /> {/* Route pour ajouter une interface */}
+      <Route path="interfaces/:id/edit" element={<InterfaceForm />} /> {/* Route pour modifier une interface */}
     </Routes>
   );
 };

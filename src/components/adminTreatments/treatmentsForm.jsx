@@ -5,20 +5,16 @@ const TraitementForm = ({ onSubmit, traitement }) => {
   const [nomTraitement, setNomTraitement] = useState(traitement ? traitement.nomTraitement : '');
   const [sensFlux, setSensFlux] = useState(traitement ? traitement.sensFlux : '');
   const [modeLancement, setModeLancement] = useState(traitement ? traitement.modeLancement : '');
-  const [interfaceNames, setInterfaceNames] = useState(traitement ? traitement.interfaceNames : []);
-  const [interfaceIds, setInterfaceIds] = useState(traitement ? traitement.interfaceIds : []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newTraitement = { nomTraitement, sensFlux, modeLancement, interfaceNames, interfaceIds };
+    const newTraitement = { nomTraitement, sensFlux, modeLancement };
     try {
       if (traitement) {
-        // Update existing traitement
         await axios.put(`http://localhost:8080/mimapi/traitements/${traitement.idTraitement}`, newTraitement, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
       } else {
-        // Create new traitement
         await axios.post('http://localhost:8080/mimapi/traitements', newTraitement, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
@@ -58,16 +54,6 @@ const TraitementForm = ({ onSubmit, traitement }) => {
           type="text"
           value={modeLancement}
           onChange={(e) => setModeLancement(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Interfaces</label>
-        <input
-          type="text"
-          value={interfaceNames.join(',')}
-          onChange={(e) => setInterfaceNames(e.target.value.split(','))}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
