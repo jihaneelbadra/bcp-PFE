@@ -58,8 +58,25 @@ const Dashboard = ({ currentDate }) => {
     setSelectedTraitementName(traitementName);
   };
 
+  // Helper function to get the start and end dates of the current week
+  const getCurrentWeekDates = (currentDate) => {
+    const current = new Date(currentDate);
+    const first = current.getDate() - current.getDay();
+    const last = first + 6;
+    const firstDay = new Date(current.setDate(first));
+    const lastDay = new Date(current.setDate(last));
+    return [firstDay, lastDay];
+  };
+
+  // Get the start and end dates of the current week
+  const [startOfWeek, endOfWeek] = getCurrentWeekDates(currentDate);
+
+  // Filter data to include only those from the current week
   const filteredInterfacesData = interfacesData.filter(
-    (item) => new Date(item.dateDebutLancement).toDateString() === new Date(currentDate).toDateString()
+    (item) => {
+      const itemDate = new Date(item.dateDebutLancement);
+      return itemDate >= startOfWeek && itemDate <= endOfWeek;
+    }
   );
 
   const anomaliesPercentage = (filteredInterfacesData.filter(item => item.etatLancement === 'échoué').length / filteredInterfacesData.length) * 100;

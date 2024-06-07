@@ -1,4 +1,3 @@
-// AppJihane.jsx
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import SidebarManager from './components/sidebar/sidebarManager';
@@ -10,26 +9,23 @@ import AdminTreatments from './components/adminTreatments/adminTreatments';
 import TreatmentsForm from './components/adminTreatments/treatmentsForm';
 import Login from './components/authentication/Login';
 import User from './components/users/user';
-import AuthProvider, { useAuth } from './components/authentication/authContext'; // Import de useAuth
-import PrivateRoute from './components/authentication/privateRoute';
 import Interfaces from './components/adminInterfaces/adminInterfaces';
-import InterfaceForm from './components/adminInterfaces/interfacesForm'; 
+import InterfaceForm from './components/adminInterfaces/interfacesForm'; // Assurez-vous d'importer InterfaceForm
 
 const App = () => {
+  const userRole = 'executor';
   const [currentDate, setCurrentDate] = useState(null);
+
+  console.log('Rendering App with userRole:', userRole);
 
   return (
     <Router>
-      <AuthProvider>
-        <MainContent currentDate={currentDate} onDateChange={setCurrentDate} />
-      </AuthProvider>
+      <MainContent userRole={userRole} currentDate={currentDate} onDateChange={setCurrentDate} />
     </Router>
   );
 };
 
-const MainContent = ({ currentDate, onDateChange }) => {
-  const { role } = useAuth(); // Utilisation de useAuth pour obtenir le rôle
-
+const MainContent = ({ userRole, currentDate, onDateChange }) => {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
   const isDashboard = location.pathname === '/dashboard';
@@ -37,18 +33,18 @@ const MainContent = ({ currentDate, onDateChange }) => {
   return (
     <div className={`flex flex-col min-h-screen ${isDashboard ? 'bg-[#F5F5F5]' : ''}`}>
       <div className="flex flex-1">
-        {!isLoginPage && <SidebarManager role={role} />}
+        {!isLoginPage && <SidebarManager role={userRole} />}
         <div className="flex flex-col w-full">
           {!isLoginPage && <Header onDateChange={onDateChange} />}
-          <div className={`flex-grow ${isLoginPage ? '' : 'p-4'}`}>
+          <div className={`flex-grow ${isLoginPage ? '' : 'p-4'}`}> {/* Condition pour appliquer ou non la classe p-4 */}
             <Routes>
               <Route path="/" element={<Navigate to="/login" />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/dashboard" element={<PrivateRoute roles={['ADMIN', 'EXECUTOR']}><Dashboard currentDate={currentDate} /></PrivateRoute>} />
-              <Route path="/treatments" element={<PrivateRoute roles={['EXECUTOR']}><Treatments /></PrivateRoute>} />
-              <Route path="/history" element={<PrivateRoute roles={['EXECUTOR']}><LaunchHistory /></PrivateRoute>} />
-              <Route path="/admin/*" element={<PrivateRoute roles={['ADMIN']}><Admin /></PrivateRoute>} />
-              <Route path="/user" element={<PrivateRoute roles={['ADMIN']}><User /></PrivateRoute>} />
+              <Route path="/dashboard" element={<Dashboard currentDate={currentDate} />} />
+              <Route path="/treatments" element={<Treatments />} />
+              <Route path="/history" element={<LaunchHistory />} />
+              <Route path="/admin/*" element={<Admin />} /> {/* Nouvelle route pour l'administration */}
+              <Route path="/user" element={<User />} />
             </Routes>
           </div>
         </div>

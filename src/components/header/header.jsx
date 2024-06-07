@@ -1,7 +1,6 @@
-// components/header/header.jsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { UserCircleIcon } from 'lucide-react';
+import { LogOutIcon } from 'lucide-react';
 import { isWeekend, isHoliday } from '../../utils/dateUtils';
 
 const Header = ({ onDateChange }) => {
@@ -32,10 +31,11 @@ const Header = ({ onDateChange }) => {
         <p className="text-sm">Journée comptable : {currentDate ? currentDate.toLocaleDateString() : 'Chargement...'}</p>
         <hr className="border-t border-gray-300 mt-2" />
       </div>
-      <div>
-        <Link to="/profil">
-          <UserCircleIcon className="h-6 w-6 text-gray-600" /> 
-        </Link>      
+      <div className="relative group">
+        <Link to="/" className="flex items-center focus:outline-none">
+          <LogOutIcon className="h-6 w-6 text-gray-600 translate-x-[100px] group-hover:translate-x-0 transition-transform" />
+          <span className="ml-2 text-gray-600 opacity-0 group-hover:opacity-100 text-red-600 transition-opacity">Se déconnecter</span>
+        </Link>
       </div>
     </div>
   );
