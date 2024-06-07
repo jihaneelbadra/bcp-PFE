@@ -2,7 +2,6 @@ import React from 'react';
 import Sidebar from './sidebar';
 import { HomeIcon, SettingsIcon, UsersIcon, FileTextIcon } from 'lucide-react';
 
-
 const SidebarManager = ({ role }) => {
   const adminMenu = [
     { name: 'Tableau de bord', path: '/dashboard', icon: <HomeIcon /> },
@@ -24,11 +23,9 @@ const SidebarManager = ({ role }) => {
     { name: 'Historique des traitements', path: '/history', icon: <FileTextIcon /> },
   ];
 
-  const menu = role === 'executor' ? adminMenu : executorMenu;
+  const menu = role === 'ADMIN' ? adminMenu : executorMenu;
 
   return <Sidebar menu={menu} />;
 };
 
 export default SidebarManager;
-
-

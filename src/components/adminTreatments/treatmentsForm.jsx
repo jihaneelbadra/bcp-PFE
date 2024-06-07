@@ -12,17 +12,26 @@ const TraitementForm = ({ onSubmit, traitement }) => {
     e.preventDefault();
     const newTraitement = { nomTraitement, sensFlux, modeLancement, interfaceNames, interfaceIds };
     try {
-      await axios.post('http://localhost:8080/mimapi/traitements', newTraitement, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
+      if (traitement) {
+        // Update existing traitement
+        await axios.put(`http://localhost:8080/mimapi/traitements/${traitement.idTraitement}`, newTraitement, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+      } else {
+        // Create new traitement
+        await axios.post('http://localhost:8080/mimapi/traitements', newTraitement, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+      }
       onSubmit();
     } catch (error) {
-      console.error('Error adding traitement:', error);
+      console.error('Error saving traitement:', error);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+      {/* Form fields */}
       <div className="">
         <label className="block text-gray-700 text-sm font-bold mb-2">Nom du Traitement</label>
         <input
@@ -63,16 +72,6 @@ const TraitementForm = ({ onSubmit, traitement }) => {
           required
         />
       </div>
-      {/* <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Interface IDs:</label>
-        <input
-          type="text"
-          value={interfaceIds.join(',')}
-          onChange={(e) => setInterfaceIds(e.target.value.split(',').map(Number))}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
-      </div> */}
       <div className="flex items-center justify-between">
         <button
           type="submit"

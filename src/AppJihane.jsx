@@ -1,34 +1,70 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import SidebarManager from './components/sidebar/sidebarManager';
 import Header from './components/header/header';
 import Dashboard from './components/dashboard/dashboard';
+import Treatments from './components/executorTreatments/treatments';
+import LaunchHistory from './components/launchHistory/launchHistory';
+import AdminTreatments from './components/adminTreatments/adminTreatments';
+import TreatmentsForm from './components/adminTreatments/treatmentsForm';
 import Login from './components/authentication/Login';
 import User from './components/users/user';
-
+import AuthProvider, { useAuth } from './components/authentication/authContext'; // Import de useAuth
+import PrivateRoute from './components/authentication/privateRoute';
 
 const App = () => {
-  
-  // Remplacez ceci par votre logique de vérification de connexion
+  const [currentDate, setCurrentDate] = useState(null);
 
   return (
     <Router>
-      <div className="flex flex-col min-h-screen">
-        <div className="flex flex-1">
-          {<SidebarManager role={'admin'} />}
-          <div className="flex flex-col w-full">
-            { <Header />}
-            <div className="flex-grow p-4">
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/dashboard" element={<Dashboard /> } />
-                <Route path="/user" element={<User /> } />
-              </Routes>
-            </div>
+      <AuthProvider>
+        <MainContent currentDate={currentDate} onDateChange={setCurrentDate} />
+      </AuthProvider>
+    </Router>
+  );
+};
+
+const MainContent = ({ currentDate, onDateChange }) => {
+  const { role } = useAuth(); // Utilisation de useAuth pour obtenir le rôle
+
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
+  const isDashboard = location.pathname === '/dashboard';
+
+  return (
+    <div className={`flex flex-col min-h-screen ${isDashboard ? 'bg-[#F5F5F5]' : ''}`}>
+      <div className="flex flex-1">
+        {!isLoginPage && <SidebarManager role={role} />}
+        <div className="flex flex-col w-full">
+          {!isLoginPage && <Header onDateChange={onDateChange} />}
+          <div className={`flex-grow ${isLoginPage ? '' : 'p-4'}`}>
+            <Routes>
+              <Route path="/" element={<Navigate to="/login" />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/dashboard" element={<PrivateRoute roles={['ADMIN', 'EXECUTOR']}><Dashboard currentDate={currentDate} /></PrivateRoute>} />
+              <Route path="/treatments" element={<PrivateRoute roles={['EXECUTOR']}><Treatments /></PrivateRoute>} />
+              <Route path="/history" element={<PrivateRoute roles={['EXECUTOR']}><LaunchHistory /></PrivateRoute>} />
+              <Route path="/admin/*" element={<PrivateRoute roles={['ADMIN']}><Admin /></PrivateRoute>} />
+              <Route path="/user" element={<PrivateRoute roles={['ADMIN']}><User /></PrivateRoute>} />
+            </Routes>
           </div>
         </div>
       </div>
-    </Router>
+    </div>
+  );
+};
+
+const Admin = () => {
+  const location = useLocation();
+  console.log('Rendering Admin with location:', location.pathname);
+  
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/admin/treatments" />} />
+      <Route path="treatments" element={<AdminTreatments />} /> {/* Route pour afficher les traitements */}
+      <Route path="treatments/add" element={<TreatmentsForm />} /> {/* Route pour ajouter un traitement */}
+      <Route path="treatments/:id/edit" element={<TreatmentsForm />} /> {/* Route pour modifier un traitement */}
+    </Routes>
   );
 };
 

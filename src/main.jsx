@@ -1,7 +1,7 @@
 
 import ReactDOM from 'react-dom/client'
 import React from 'react'
-import App from './AppBetty.jsx'
+import App from './AppJihane.jsx'
 import './index.css'
 
 
