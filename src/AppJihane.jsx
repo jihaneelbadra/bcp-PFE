@@ -46,7 +46,7 @@ const MainContent = ({ currentDate, onDateChange }) => {
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<PrivateRoute roles={['ADMIN', 'EXECUTOR']}><Dashboard currentDate={currentDate} /></PrivateRoute>} />
               <Route path="/treatments" element={<PrivateRoute roles={['EXECUTOR']}><Treatments /></PrivateRoute>} />
-              <Route path="/history" element={<PrivateRoute roles={['EXECUTOR']}><LaunchHistory /></PrivateRoute>} />
+              <Route path="/history" element={<PrivateRoute roles={['EXECUTOR', 'ADMIN']}><LaunchHistory /></PrivateRoute>} />
               <Route path="/admin/*" element={<PrivateRoute roles={['ADMIN']}><Admin /></PrivateRoute>} />
               <Route path="/user" element={<PrivateRoute roles={['ADMIN']}><User /></PrivateRoute>} />
             </Routes>

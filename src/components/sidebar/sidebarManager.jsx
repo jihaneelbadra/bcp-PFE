@@ -15,6 +15,7 @@ const SidebarManager = ({ role }) => {
       ] 
     },
     { name: 'Gestion des utilisateurs', path: '/user', icon: <UsersIcon /> },
+    { name: 'Historique des traitements', path: '/history', icon: <FileTextIcon /> },
   ];
 
   const executorMenu = [

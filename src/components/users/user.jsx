@@ -182,7 +182,7 @@ const Users = () => {
               name="firstname"
               value={currentUser.firstname}
               onChange={handleInputChange}
-              placeholder="First Name"
+              placeholder="Prénom"
               className="border p-2"
               required
             />
@@ -191,7 +191,7 @@ const Users = () => {
               name="lastname"
               value={currentUser.lastname}
               onChange={handleInputChange}
-              placeholder="Last Name"
+              placeholder="Nom"
               className="border p-2"
               required
             />
@@ -218,7 +218,7 @@ const Users = () => {
               name="tel"
               value={currentUser.tel}
               onChange={handleInputChange}
-              placeholder="Phone"
+              placeholder="Tel"
               className="border p-2"
               required
             />
@@ -227,7 +227,7 @@ const Users = () => {
               name="password"
               value={currentUser.password}
               onChange={handleInputChange}
-              placeholder="Password"
+              placeholder="Mot de passe"
               className="border p-2"
               required
             />
